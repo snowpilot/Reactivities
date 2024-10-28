@@ -1,4 +1,6 @@
 using API.Extensions;
+using Application.Activities;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -19,6 +21,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
+// builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 app.UseAuthorization();
 
