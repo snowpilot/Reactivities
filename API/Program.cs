@@ -1,6 +1,8 @@
 using API.Extensions;
+using API.Middleware;
 using Application.Activities;
 using Application.Core;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -15,14 +17,18 @@ builder.Services.AddCors(opt => {
     opt.AddPolicy("CorsPolicy", policy =>
     {
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5000");
     });
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
+    // app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -45,7 +51,7 @@ try
     await context.Database.MigrateAsync();
     await Seed.SeedData(context);
 }
-catch (Exception ex)
+    catch (Exception ex)
 {
     
     var logger = services.GetRequiredService<ILogger<Program>>();
