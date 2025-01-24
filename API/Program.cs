@@ -1,10 +1,9 @@
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Application.Activities;
-using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +24,15 @@ builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddCors(opt => {
     opt.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5000");
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:3000");
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://localhost:5000");
     });
 });
 
@@ -51,6 +57,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

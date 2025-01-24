@@ -5,6 +5,7 @@ using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using Persistence;
 
 namespace API.Extensions
@@ -31,6 +32,20 @@ namespace API.Extensions
                     IssuerSigningKey = key,
                     ValidateIssuer = false,
                     ValidateAudience = false
+                };
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context => 
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && 
+                            path.StartsWithSegments("/chat"))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

@@ -1,6 +1,7 @@
 ﻿using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -14,6 +15,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")] // api/activities/fasdfsdfä
+        [EnableCors("CorsPolicy")]
         public async Task<IActionResult> GetActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query{Id = id}));           
