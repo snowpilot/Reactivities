@@ -11,8 +11,8 @@ export default observer(function LoginForm() {
             initialValues={{email: '', password: '', error: null}}
             onSubmit={(values, {setErrors}) => 
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                userStore.login(values).catch(error => 
-                setErrors({error: 'Invalid email or password'}))}
+                userStore.login(values).catch(_error => 
+                    setErrors({error: `Invalid email or password {error}`}))}
         >
             {({handleSubmit, isSubmitting, errors}) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>

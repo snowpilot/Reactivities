@@ -44,7 +44,8 @@ export default observer(function ActivityForm() {
                 hostUsername: '',
                 isCancelled: false,
                 isGoing: false,
-                isHost: false
+                isHost: false,
+                attendees: []
             }
             activity.id = uuid();
             createActivity(newActivity).then(() => navigate(`/activities/${newActivity.id}`))
@@ -55,7 +56,8 @@ export default observer(function ActivityForm() {
                 hostUsername: '',
                 isCancelled: false,
                 isGoing: false,
-                isHost: false
+                isHost: false,
+                attendees: []
             };
             updateActivity(updatedActivity).then(() => navigate(`/activities/${activity.id}`))
         }
